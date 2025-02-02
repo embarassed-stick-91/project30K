@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Countdown</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        .hidden { display: none; }
+        .container { max-width: 400px; margin: auto; }
+        select, input, button { width: 100%; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="step1">
+            <h1>Life Countdown</h1>
+            <p>Discover how many days you have left in your life.</p>
+            <button onclick="showStep('step2')">See Your Life Countdown</button>
+        </div>
+
+        <div id="step2" class="hidden">
+            <h2>Enter Your Details</h2>
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob">
+            <label for="gender">Gender:</label>
+            <select id="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <button onclick="showStep('step3')">Continue</button>
+        </div>
+
+        <div id="step3" class="hidden">
+            <h2>Select Your Country</h2>
+            <label for="country">Country:</label>
+            <select id="country">
+                <option value="US">United States</option>
+                <option value="UK">United Kingdom</option>
+                <option value="CA">Canada</option>
+                <option value="IN">India</option>
+                <option value="UAE">United Arab Emirates</option>
+            </select>
+            <button onclick="calculateDaysLeft()">View My Day Count</button>
+        </div>
+
+        <div id="result" class="hidden">
+            <h2>Your Remaining Days</h2>
+            <p id="daysLeft"></p>
+            <button onclick="restart()">Start Over</button>
+        </div>
+    </div>
+
+    <script>
+        const lifeExpectancy = {
+            "US": { male: 76, female: 81 },
+            "UK": { male: 79, female: 83 },
+            "CA": { male: 80, female: 84 },
+            "IN": { male: 70, female: 72 },
+            "UAE": { male: 77, female: 80 }
+        };
+
+        function showStep(stepId) {
+            document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById(stepId).classList.remove('hidden');
+        }
+
+        function calculateDaysLeft() {
+            const dob = new Date(document.getElementById('dob').value);
+            const gender = document.getElementById('gender').value;
+            const country = document.getElementById('country').value;
+            
+            if (!dob || !gender || !country) {
+                alert("Please fill in all fields.");
+                return;
+            }
+            
+            const expectancy = lifeExpectancy[country][gender];
+            const today = new Date();
+            const age = (today - dob) / (1000 * 60 * 60 * 24 * 365.25);
+            const remainingYears = expectancy - age;
+            const remainingDays = Math.max(0, Math.round(remainingYears * 365.25));
+            
+            document.getElementById("daysLeft").textContent = `You have approximately ${remainingDays} days left.`;
+            showStep('result');
+        }
+
+        function restart() {
+            showStep('step1');
+        }
+    </script>
+</body>
+</html>
