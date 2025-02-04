@@ -68,49 +68,41 @@
             font-weight: bold;
             display: none;
         }
+        .emotions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .emoji {
+            font-size: 32px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .emoji.selected {
+            transform: scale(1.2);
+            border-radius: 50%;
+            background-color: #ddd;
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="step1">
-            <h1>Life Countdown</h1>
-            <p>Discover how many days you have left in your life.</p>
-            <button onclick="showStep('step2')">Check Your Day Count</button>
-        </div>
-
-        <div id="step2" class="hidden">
-            <h2>Enter Your Details</h2>
-            <label for="dob">Date of Birth:</label>
-            <input type="date" id="dob">
-            <label for="gender">Gender:</label>
-            <select id="gender">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
-            <button onclick="showStep('step3')">Continue</button>
-        </div>
-
-        <div id="step3" class="hidden">
-            <h2>Select Your Country</h2>
-            <label for="country">Country:</label>
-            <select id="country">
-                <option value="US">United States</option>
-                <option value="UK">United Kingdom</option>
-                <option value="CA">Canada</option>
-                <option value="IN">India</option>
-                <option value="UAE">United Arab Emirates</option>
-            </select>
-            <button onclick="calculateDaysLeft()">View My Day Count</button>
-        </div>
-
-        <div id="result" class="hidden">
+        <div id="result">
             <h2>Your Remaining Days</h2>
-            <p id="daysLeft"></p>
+            <p id="daysLeft">0</p>
             <button onclick="showStep('journalStep')">Tell Us About Today</button>
         </div>
 
         <div id="journalStep" class="hidden">
             <h2>Tell us about today</h2>
+            <div class="emotions">
+                <span class="emoji" onclick="selectEmoji(this)">😃</span>
+                <span class="emoji" onclick="selectEmoji(this)">🙂</span>
+                <span class="emoji" onclick="selectEmoji(this)">😐</span>
+                <span class="emoji" onclick="selectEmoji(this)">🙁</span>
+                <span class="emoji" onclick="selectEmoji(this)">😢</span>
+            </div>
             <textarea id="journalEntry" placeholder="Write your thoughts here..." maxlength="280" oninput="updateCharCount()"></textarea>
             <p class="char-counter" id="charCount">280 characters remaining</p>
             <button onclick="saveJournal()">Save Note</button>
@@ -119,37 +111,9 @@
     </div>
 
     <script>
-        const lifeExpectancy = {
-            "US": { male: 76, female: 81 },
-            "UK": { male: 79, female: 83 },
-            "CA": { male: 80, female: 84 },
-            "IN": { male: 70, female: 72 },
-            "UAE": { male: 77, female: 80 }
-        };
-
-        function showStep(stepId) {
-            document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
-            document.getElementById(stepId).classList.remove('hidden');
-        }
-
-        function calculateDaysLeft() {
-            const dob = new Date(document.getElementById('dob').value);
-            const gender = document.getElementById('gender').value;
-            const country = document.getElementById('country').value;
-            
-            if (!dob || !gender || !country) {
-                alert("Please fill in all fields.");
-                return;
-            }
-            
-            const expectancy = lifeExpectancy[country][gender];
-            const today = new Date();
-            const age = (today - dob) / (1000 * 60 * 60 * 24 * 365.25);
-            const remainingYears = expectancy - age;
-            const remainingDays = Math.max(0, Math.round(remainingYears * 365.25));
-            
-            document.getElementById("daysLeft").textContent = `${remainingDays}`;
-            showStep('result');
+        function selectEmoji(element) {
+            document.querySelectorAll('.emoji').forEach(emoji => emoji.classList.remove('selected'));
+            element.classList.add('selected');
         }
 
         function updateCharCount() {
@@ -161,7 +125,6 @@
             document.getElementById('successMessage').style.display = 'block';
             setTimeout(() => {
                 document.getElementById('successMessage').style.display = 'none';
-                showStep('step1');
             }, 2000);
         }
     </script>
