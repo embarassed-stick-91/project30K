@@ -10,21 +10,38 @@
         body { 
             font-family: 'SF Pro Display', Arial, sans-serif; 
             text-align: center; 
-            padding: 20px; 
-            background-color: #f4f4f4;
+            background-color: white;
             color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
         }
         .hidden { display: none; }
-        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        select, input, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
+        .container { 
+            width: 100%; 
+            max-width: 400px; 
+            padding: 20px; 
+        }
+        select, input, button, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border-radius: 25px; 
+            border: 1px solid #ccc; 
+            font-size: 16px; 
+        }
         button { 
             background: black; 
             color: white; 
             font-family: 'SF Pro Display', Arial, sans-serif; 
-            font-size: 16px;
+            font-size: 18px;
             border: none;
             cursor: pointer; 
             transition: background 0.3s;
+            padding: 14px;
         }
         button:hover { background: #222; }
         #daysLeft {
@@ -36,6 +53,21 @@
         @media (max-width: 768px) {
             #daysLeft { font-size: 48px; }
         }
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+        .char-counter {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+        }
+        .success-message {
+            color: green;
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -43,7 +75,7 @@
         <div id="step1">
             <h1>Life Countdown</h1>
             <p>Discover how many days you have left in your life.</p>
-            <button onclick="showStep('step2')">See Your Life Countdown</button>
+            <button onclick="showStep('step2')">Check Your Day Count</button>
         </div>
 
         <div id="step2" class="hidden">
@@ -74,7 +106,15 @@
         <div id="result" class="hidden">
             <h2>Your Remaining Days</h2>
             <p id="daysLeft"></p>
-            <button onclick="restart()">Start Over</button>
+            <button onclick="showStep('journalStep')">Tell Us About Today</button>
+        </div>
+
+        <div id="journalStep" class="hidden">
+            <h2>Tell us about today</h2>
+            <textarea id="journalEntry" placeholder="Write your thoughts here..." maxlength="280" oninput="updateCharCount()"></textarea>
+            <p class="char-counter" id="charCount">280 characters remaining</p>
+            <button onclick="saveJournal()">Save Note</button>
+            <p class="success-message" id="successMessage">✔ Note saved successfully!</p>
         </div>
     </div>
 
@@ -112,8 +152,17 @@
             showStep('result');
         }
 
-        function restart() {
-            showStep('step1');
+        function updateCharCount() {
+            const text = document.getElementById('journalEntry').value;
+            document.getElementById('charCount').textContent = `${280 - text.length} characters remaining`;
+        }
+
+        function saveJournal() {
+            document.getElementById('successMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+                showStep('step1');
+            }, 2000);
         }
     </script>
 </body>
