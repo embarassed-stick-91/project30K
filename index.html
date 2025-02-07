@@ -32,6 +32,13 @@
             border-radius: 25px; 
             border: 1px solid #ccc; 
             font-size: 16px; 
+            appearance: none;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+        input[type="date"], select {
+            position: relative;
+            padding-right: 40px;
         }
         button { 
             background: black; 
@@ -76,95 +83,101 @@
         .emoji {
             font-size: 32px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, color 0.3s;
+            color: black;
+        }
+        .emoji:hover {
+            color: purple;
+            transform: scale(1.1);
         }
         .emoji.selected {
+            color: purple;
             transform: scale(1.2);
-            border-radius: 50%;
-            background-color: #ddd;
-            padding: 5px;
+        }
+        .error {
+            border: 2px solid red;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div id="step1">
-            <h1>Life Countdown</h1>
-            <p>Discover how many days you have left in your life.</p>
-            <button onclick="showStep('step2')">Check Your Day Count</button>
-        </div>
+    <div class="container" id="step1">
+        <h2>Enter Your Details</h2>
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" onchange="clearError(this)">
+        <label for="gender">Gender:</label>
+        <select id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        <button onclick="proceedToStep2()">Continue</button>
+    </div>
+    
+    <div class="container hidden" id="step2">
+        <h2>Select Your Country</h2>
+        <label for="country">Country:</label>
+        <select id="country">
+            <option value="US">United States</option>
+            <option value="UK">United Kingdom</option>
+        </select>
+        <button onclick="calculateDaysLeft()">View My Day Count</button>
+    </div>
 
-        <div id="step2" class="hidden">
-            <h2>Enter Your Details</h2>
-            <label for="dob">Date of Birth:</label>
-            <input type="date" id="dob">
-            <label for="gender">Gender:</label>
-            <select id="gender">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
-            <button onclick="showStep('step3')">Continue</button>
-        </div>
+    <div class="container hidden" id="result">
+        <h2>Your Remaining Days</h2>
+        <p id="daysLeft">0</p>
+        <button onclick="showStep('journalStep')">Tell Us About Today</button>
+    </div>
 
-        <div id="step3" class="hidden">
-            <h2>Select Your Country</h2>
-            <label for="country">Country:</label>
-            <select id="country">
-                <option value="US">United States</option>
-                <option value="UK">United Kingdom</option>
-                <option value="CA">Canada</option>
-                <option value="IN">India</option>
-                <option value="UAE">United Arab Emirates</option>
-            </select>
-            <button onclick="calculateDaysLeft()">View My Day Count</button>
+    <div class="container hidden" id="journalStep">
+        <h2>Tell us about today</h2>
+        <div class="emotions">
+            <span class="emoji" onclick="selectEmoji(this)">🙂</span>
+            <span class="emoji" onclick="selectEmoji(this)">😊</span>
+            <span class="emoji" onclick="selectEmoji(this)">😐</span>
+            <span class="emoji" onclick="selectEmoji(this)">☹️</span>
+            <span class="emoji" onclick="selectEmoji(this)">😢</span>
         </div>
-
-        <div id="result" class="hidden">
-            <h2>Your Remaining Days</h2>
-            <p id="daysLeft">0</p>
-            <button onclick="showStep('journalStep')">Tell Us About Today</button>
-        </div>
-
-        <div id="journalStep" class="hidden">
-            <h2>Tell us about today</h2>
-            <div class="emotions">
-                <span class="emoji" onclick="selectEmoji(this)">😃</span>
-                <span class="emoji" onclick="selectEmoji(this)">🙂</span>
-                <span class="emoji" onclick="selectEmoji(this)">😐</span>
-                <span class="emoji" onclick="selectEmoji(this)">🙁</span>
-                <span class="emoji" onclick="selectEmoji(this)">😢</span>
-            </div>
-            <textarea id="journalEntry" placeholder="Write your thoughts here..." maxlength="280" oninput="updateCharCount()"></textarea>
-            <p class="char-counter" id="charCount">280 characters remaining</p>
-            <button onclick="saveJournal()">Save Note</button>
-            <p class="success-message" id="successMessage">✔ Note saved successfully!</p>
-        </div>
+        <textarea id="journalEntry" placeholder="Write your thoughts here..." maxlength="280" oninput="updateCharCount()"></textarea>
+        <p class="char-counter" id="charCount">280 characters remaining</p>
+        <button onclick="saveJournal()">Save Note</button>
+        <p class="success-message" id="successMessage">✔ Note saved successfully!</p>
     </div>
 
     <script>
+        function proceedToStep2() {
+            const dob = document.getElementById('dob');
+            if (!dob.value) {
+                dob.classList.add('error');
+                return;
+            }
+            showStep('step2');
+        }
+
+        function clearError(input) {
+            input.classList.remove('error');
+        }
+
         function showStep(stepId) {
-            document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
+            document.querySelectorAll('.container').forEach(div => div.classList.add('hidden'));
             document.getElementById(stepId).classList.remove('hidden');
         }
 
-        function calculateDaysLeft() {
-            const dob = new Date(document.getElementById('dob').value);
-            const gender = document.getElementById('gender').value;
-            const country = document.getElementById('country').value;
-            
-            if (!dob || !gender || !country) {
-                alert("Please fill in all fields.");
-                return;
-            }
-            
-            const expectancy = { "US": { male: 76, female: 81 }, "UK": { male: 79, female: 83 }, "CA": { male: 80, female: 84 }, "IN": { male: 70, female: 72 }, "UAE": { male: 77, female: 80 } };
-            const today = new Date();
-            const age = (today - dob) / (1000 * 60 * 60 * 24 * 365.25);
-            const remainingYears = expectancy[country][gender] - age;
-            const remainingDays = Math.max(0, Math.round(remainingYears * 365.25));
-            
-            document.getElementById("daysLeft").textContent = `${remainingDays}`;
-            showStep('result');
+        function selectEmoji(element) {
+            document.querySelectorAll('.emoji').forEach(emoji => emoji.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function updateCharCount() {
+            const text = document.getElementById('journalEntry').value;
+            document.getElementById('charCount').textContent = `${280 - text.length} characters remaining`;
+        }
+
+        function saveJournal() {
+            document.getElementById('successMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+                showStep('step1');
+            }, 2000);
         }
     </script>
 </body>
