@@ -32,6 +32,7 @@
             border-radius: 25px; 
             border: 1px solid #ccc; 
             font-size: 16px; 
+            box-sizing: border-box;
         }
         button { 
             background: black; 
@@ -68,6 +69,28 @@
             font-weight: bold;
             display: none;
         }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .error { border-color: red; }
+        .emoticon-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .emoticon {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            filter: grayscale(100%);
+            transition: filter 0.3s;
+        }
+        .emoticon.selected {
+            filter: grayscale(0%) brightness(0.5) sepia(1) hue-rotate(260deg) saturate(5);
+        }
     </style>
 </head>
 <body>
@@ -81,13 +104,14 @@
         <div id="step2" class="hidden">
             <h2>Enter Your Details</h2>
             <label for="dob">Date of Birth:</label>
-            <input type="date" id="dob">
+            <input type="date" id="dob" required>
+            <p class="error-message" id="dobError">Please enter your date of birth.</p>
             <label for="gender">Gender:</label>
             <select id="gender">
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
-            <button onclick="showStep('step3')">Continue</button>
+            <button onclick="validateStep2()">Continue</button>
         </div>
 
         <div id="step3" class="hidden">
@@ -111,6 +135,13 @@
 
         <div id="journalStep" class="hidden">
             <h2>Tell us about today</h2>
+            <div class="emoticon-container">
+                <img src="https://img.icons8.com/ios/100/000000/very-happy.png" class="emoticon" onclick="selectEmoticon(this)" alt="Very Happy">
+                <img src="https://img.icons8.com/ios/100/000000/happy.png" class="emoticon" onclick="selectEmoticon(this)" alt="Slightly Happy">
+                <img src="https://img.icons8.com/ios/100/000000/neutral.png" class="emoticon" onclick="selectEmoticon(this)" alt="Neutral">
+                <img src="https://img.icons8.com/ios/100/000000/sad.png" class="emoticon" onclick="selectEmoticon(this)" alt="Slightly Sad">
+                <img src="https://img.icons8.com/ios/100/000000/very-sad.png" class="emoticon" onclick="selectEmoticon(this)" alt="Very Sad">
+            </div>
             <textarea id="journalEntry" placeholder="Write your thoughts here..." maxlength="280" oninput="updateCharCount()"></textarea>
             <p class="char-counter" id="charCount">280 characters remaining</p>
             <button onclick="saveJournal()">Save Note</button>
@@ -130,6 +161,18 @@
         function showStep(stepId) {
             document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
             document.getElementById(stepId).classList.remove('hidden');
+        }
+
+        function validateStep2() {
+            const dob = document.getElementById('dob').value;
+            if (!dob) {
+                document.getElementById('dob').classList.add('error');
+                document.getElementById('dobError').style.display = 'block';
+            } else {
+                document.getElementById('dob').classList.remove('error');
+                document.getElementById('dobError').style.display = 'none';
+                showStep('step3');
+            }
         }
 
         function calculateDaysLeft() {
@@ -163,6 +206,11 @@
                 document.getElementById('successMessage').style.display = 'none';
                 showStep('step1');
             }, 2000);
+        }
+
+        function selectEmoticon(emoticon) {
+            document.querySelectorAll('.emoticon').forEach(e => e.classList.remove('selected'));
+            emoticon.classList.add('selected');
         }
     </script>
 </body>
