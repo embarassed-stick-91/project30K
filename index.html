@@ -104,7 +104,14 @@
         <div id="step2" class="hidden">
             <h2>Enter Your Details</h2>
             <label for="dob">Date of Birth:</label>
-            <input type="date" id="dob" required>
+            <!-- <input type="date" id="dob" required> -->
+            <input type="text" id="dob" required>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr("#dob", {
+        dateFormat: "Y-m-d"
+    });
+</script>
             <p class="error-message" id="dobError">Please enter your date of birth.</p>
             <label for="gender">Gender:</label>
             <select id="gender">
