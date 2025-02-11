@@ -69,6 +69,19 @@
             font-weight: bold;
             display: none;
         }
+        .emoji-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 10px 0;
+        }
+        .emoji {
+            font-size: 32px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .emoji.selected {
+            transform: scale(1.3);
+        }
     </style>
 </head>
 <body>
@@ -112,6 +125,13 @@
 
         <div id="journalStep" class="hidden">
             <h2>Tell us about today</h2>
+            <div class="emoji-container">
+                <span class="emoji" onclick="selectEmoji(this)">😀</span>
+                <span class="emoji" onclick="selectEmoji(this)">🙂</span>
+                <span class="emoji" onclick="selectEmoji(this)">😐</span>
+                <span class="emoji" onclick="selectEmoji(this)">☹️</span>
+                <span class="emoji" onclick="selectEmoji(this)">😢</span>
+            </div>
             <textarea id="journalEntry" placeholder="Write your thoughts here..." maxlength="280" oninput="updateCharCount()"></textarea>
             <p class="char-counter" id="charCount">280 characters remaining</p>
             <button onclick="saveJournal()">Save Note</button>
@@ -152,8 +172,8 @@
             document.getElementById("daysLeft").textContent = `${remainingDays}`;
             showStep('result');
         }
-
-        function updateCharCount() {
+    
+          function updateCharCount() {
             const text = document.getElementById('journalEntry').value;
             document.getElementById('charCount').textContent = `${280 - text.length} characters remaining`;
         }
@@ -165,6 +185,7 @@
                 showStep('step1');
             }, 2000);
         }
-    </script>
+  
+  </script>
 </body>
 </html>
