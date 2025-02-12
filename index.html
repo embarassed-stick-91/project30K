@@ -6,7 +6,19 @@
     <title>Life Countdown</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Add Tom Select (for dropdowns) & Flatpickr (for datepicker) Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
     <style>
+        /* Ensure all elements calculate width properly */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'SF Pro Display', Arial, sans-serif;
             text-align: center;
@@ -25,12 +37,12 @@
             max-width: 400px;
             padding: 20px;
         }
-        select, input, button, textarea {
+        select, button, textarea {
             width: 100%;
             padding: 20px;
             margin: 10px 0;
-            border-radius: 25px;
-            border: 1px solid #ccc;
+            border-radius: 24px;
+            border: 1px solid #f5f5f5;
             font-size: 16px;
         }
         button { 
@@ -41,7 +53,6 @@
             border: none;
             cursor: pointer; 
             transition: background 0.3s;
-            padding: 14px;
         }
         button:hover { background: #222; }
         .outline-button {
@@ -114,7 +125,27 @@
             justify-content: center;
             align-items: center;
         }
+
+
+        /* Unified Styling for Inputs, Select, and Date Picker */
+        .input-field,
+        .ts-wrapper,
+        .flatpickr-input {
+            width: 100%;
+            padding: 20px; /* Slightly adjusted to ensure visual consistency */
+            border-radius: 24px;
+            border: 1px solid #f5f5f5;
+            font-size: 16px;
+            background: white;
+            box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
+            height: 32px; /* Explicitly set height for uniformity */
+            display: flex;
+            align-items: center; /* Ensures text inside is vertically aligned */
+            justify-content: center; /* Ensures text inside the button is centered */
+        }
     </style>
+
+
 </head>
 <body>
     <div class="container">
@@ -127,26 +158,31 @@
 
         <div id="step2" class="hidden">
             <h2>Enter Your Details</h2>
-            <label for="dob">Date of Birth:</label>
-            <input type="date" id="dob">
-            <label for="gender">Gender:</label>
-            <select id="gender">
+            
+            <input type="text" id="dob" class="input-field" placeholder="Select your date of birth">
+
+            <select id="gender" class="input-field">
+                <option value="" disabled selected>Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
+            
             <button onclick="showStep('step3')">Continue</button>
         </div>
 
         <div id="step3" class="hidden">
             <h2>Select Your Country</h2>
-            <label for="country">Country:</label>
-            <select id="country">
-                <option value="US">United States</option>
-                <option value="UK">United Kingdom</option>
-                <option value="CA">Canada</option>
-                <option value="IN">India</option>
-                <option value="UAE">United Arab Emirates</option>
-            </select>
+            
+                    <label for="country">Country:</label>
+        <select id="country" class="input-field" placeholder="Select your country">
+            <option value="US">United States</option>
+            <option value="UK">United Kingdom</option>
+            <option value="CA">Canada</option>
+            <option value="IN">India</option>
+            <option value="UAE">United Arab Emirates</option>
+        </select>
+            
+            
             <button onclick="calculateDaysLeft()">View My Day Count</button>
         </div>
 
@@ -156,21 +192,25 @@
             <button onclick="showStep('journalStep')">Tell Us About Today</button>
         </div>
 
-        <div id="journalStep" class="hidden">
-            <h2>Tell us about today</h2>
-            <div class="emoji-container">
-                <span class="emoji" onclick="selectEmoji(this)">😀</span>
-                <span class="emoji" onclick="selectEmoji(this)">🙂</span>
-                <span class="emoji" onclick="selectEmoji(this)">😐</span>
-                <span class="emoji" onclick="selectEmoji(this)">☹️</span>
-                <span class="emoji" onclick="selectEmoji(this)">😢</span>
-            </div>
-            <textarea id="journalEntry" placeholder="Write your thoughts here..." maxlength="280" oninput="updateCharCount()"></textarea>
-            <p class="char-counter" id="charCount">280 characters remaining</p>
-            <button onclick="saveJournal()">Save Note</button>
-            <p class="success-message" id="successMessage">✔ Note saved successfully!</p>
-        </div>
+
+    <div id="journalStep" class="hidden">
+    <h2>Tell us about today</h2>
+    <div class="emoji-container">
+        <span class="emoji" onclick="selectEmoji(this)">😀</span>
+        <span class="emoji" onclick="selectEmoji(this)">🙂</span>
+        <span class="emoji" onclick="selectEmoji(this)">😐</span>
+        <span class="emoji" onclick="selectEmoji(this)">☹️</span>
+        <span class="emoji" onclick="selectEmoji(this)">😢</span>
     </div>
+    <textarea id="journalEntry" placeholder="Write your thoughts here..." maxlength="280" oninput="updateCharCount()"></textarea>
+    <p class="char-counter" id="charCount">280 characters remaining</p>
+    
+    <!-- Added an ID to the button -->
+    <button id="saveButton" onclick="saveJournal()">Save Note</button>
+
+    <!-- Success message is hidden initially -->
+    <p class="success-message" id="successMessage" style="display: none;">✔ Note saved successfully!</p>
+</div>
 
         <div id="notesPage" class="hidden">
             <h2>Your Notes</h2>
@@ -221,8 +261,12 @@
             selectedEmoji = element.textContent;
         }
 
-        function saveJournal() {
+
+            function saveJournal() {
             const text = document.getElementById('journalEntry').value.trim();
+            const saveButton = document.getElementById('saveButton'); 
+            const successMessage = document.getElementById('successMessage');
+        
             if (!selectedEmoji) {
                 alert("Please select an emoji");
                 return;
@@ -231,10 +275,18 @@
                 alert("Please enter a note");
                 return;
             }
+        
             const notes = JSON.parse(localStorage.getItem('notes')) || [];
             notes.unshift({ date: new Date().toLocaleDateString(), emoji: selectedEmoji, text });
             localStorage.setItem('notes', JSON.stringify(notes));
-            document.getElementById('successMessage').style.display = 'block';
+        
+            // Hide the button immediately
+            saveButton.style.display = 'none';
+        
+            // Show the success message instantly
+            successMessage.style.display = 'block';
+        
+            // Redirect or refresh step after 1.5 seconds
             setTimeout(() => showStep('step1'), 1500);
         }
 
@@ -245,5 +297,24 @@
             showStep('notesPage');
         }
     </script>
+
+    <!-- Add Tom Select & Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    // Initialize Flatpickr for Date Picker
+    flatpickr("#dob", {
+        dateFormat: "Y-m-d",
+        maxDate: "today",
+        altInput: true,
+        altFormat: "F j, Y"
+    });
+
+    // Initialize Tom Select for Dropdowns
+    new TomSelect("#gender", { create: false });
+    new TomSelect("#country", { create: false });
+</script>
+    
 </body>
 </html>
