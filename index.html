@@ -373,6 +373,9 @@
             const notes = JSON.parse(localStorage.getItem('notes')) || [];
             const notesList = document.getElementById('notesList');
             const notesContainer = document.getElementById('notesContainer');
+
+            // Hide all other sections
+            document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
             
             // Generate HTML with proper layout
             notesList.innerHTML = notes.map(note => `
@@ -408,6 +411,7 @@
         new TomSelect("#gender", {
             create: false,          // Prevents adding new values
             dropdownInput: false,   // Removes blinking cursor issue
+
         });
         new TomSelect("#country", {
             create: false,          // Prevents adding new values
