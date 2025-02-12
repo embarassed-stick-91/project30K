@@ -54,12 +54,26 @@
             cursor: pointer; 
             transition: background 0.3s;
         }
-        button:hover { background: #222; }
+        button:hover { background: #9270CD; }
+        
         .outline-button {
             background: white;
             color: black;
             border: 2px solid black;
         }
+        .outline-button:hover {
+        background: white;
+        border-color: #9270CD; /* Change border color */
+        color: #9270CD; /* Change text color */
+        }
+        
+        .hero-illustration {
+        width: 100%; /* Makes it responsive */
+        max-width: 300px; /* Adjust to fit */
+        margin: 20px auto; /* Adds spacing */
+        display: block; /* Centers the image */
+        }
+        
         .emoji-container {
             display: flex;
             justify-content: space-around;
@@ -142,6 +156,64 @@
             display: flex;
             align-items: center; /* Ensures text inside is vertically aligned */
             justify-content: center; /* Ensures text inside the button is centered */
+            margin-bottom: 16px; /* Adds spacing */
+        }
+
+        .ts-control {
+            border: none !important; /* Removes extra border */
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        
+        /* Styling for the Notes Container */
+        .notesContainer {
+            width: 640px;
+            height: 480px;
+            border: 2px solid purple;  /* Purple border */
+            background: #f8f0ff; /* Very light purple */
+            padding: 20px;
+            border-radius: 12px;
+            overflow-y: auto; /* Scroll if content overflows */
+            display: none; /* HIDDEN BY DEFAULT */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: auto;
+        }
+
+        /* Individual Note Item */
+        .note-item {
+            display: flex;
+            width: 100%;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-bottom: 1px solid #ddd; /* Subtle separation */
+        }
+
+        /* Date Column (Fixed Width) */
+        .note-date {
+            width: 120px; /* Fixed width */
+            font-weight: bold;
+            color: #444;
+        }
+
+        /* Emoji Column */
+        .note-emoji {
+            margin-left: 48px; /* Ensures at least 48px spacing */
+            font-size: 20px;
+        }
+
+        /* Text Content */
+        .note-text {
+            margin-left: 48px; /* Ensures at least 48px spacing */
+            flex: 1;
+            color: #333;
+        }
+
+        #gender {
+        width: 100%; /* Match width of input fields */
         }
     </style>
 
@@ -150,8 +222,9 @@
 <body>
     <div class="container">
         <div id="step1">
+            <img src="https://raw.githubusercontent.com/embarassed-stick-91/project30K/main/Hero.svg" alt="Illustration" class="hero-illustration">
             <h1>Life Countdown</h1>
-            <p>Discover how many days you have left in your life.</p>
+            <p>Discover how many days you've left in your life jar.</p>
             <button onclick="showStep('step2')">Check Your Day Count</button>
             <button class="outline-button" onclick="viewNotes()">View Your Notes</button>
         </div>
@@ -161,7 +234,7 @@
             
             <input type="text" id="dob" class="input-field" placeholder="Select your date of birth">
 
-            <select id="gender" class="input-field">
+            <select id="gender">
                 <option value="" disabled selected>Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -212,7 +285,7 @@
     <p class="success-message" id="successMessage" style="display: none;">✔ Note saved successfully!</p>
 </div>
 
-        <div id="notesPage" class="hidden">
+         <div id="notesContainer" class="hidden">
             <h2>Your Notes</h2>
             <div id="notesList"></div>
             <button onclick="showStep('step1')">Return to Home</button>
@@ -277,7 +350,7 @@
             }
         
             const notes = JSON.parse(localStorage.getItem('notes')) || [];
-            notes.unshift({ date: new Date().toLocaleDateString(), emoji: selectedEmoji, text });
+            notes.unshift({ date: new Date().toISOString(), emoji: selectedEmoji, text });
             localStorage.setItem('notes', JSON.stringify(notes));
         
             // Hide the button immediately
@@ -290,12 +363,31 @@
             setTimeout(() => showStep('step1'), 1500);
         }
 
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            if (isNaN(date)) return "Invalid Date"; // Handle edge cases
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
         function viewNotes() {
             const notes = JSON.parse(localStorage.getItem('notes')) || [];
             const notesList = document.getElementById('notesList');
-            notesList.innerHTML = notes.map(note => `<p><strong>${note.date}</strong> ${note.emoji} - ${note.text}</p>`).join('');
-            showStep('notesPage');
+            const notesContainer = document.getElementById('notesContainer');
+            
+            // Generate HTML with proper layout
+            notesList.innerHTML = notes.map(note => `
+                <div class="note-item">
+                    <div class="note-date">${formatDate(note.date)}</div>
+                    <div class="note-emoji">${note.emoji}</div>
+                    <div class="note-text">${note.text}</div>
+                </div>
+            `).join('');
+            // Show the container
+            notesContainer.style.display = "block";
         }
+
+        // Call viewNotes() when the page loads
+        //viewNotes();
     </script>
 
     <!-- Add Tom Select & Flatpickr JS -->
@@ -312,8 +404,16 @@
     });
 
     // Initialize Tom Select for Dropdowns
-    new TomSelect("#gender", { create: false });
-    new TomSelect("#country", { create: false });
+    document.addEventListener("DOMContentLoaded", function () {
+        new TomSelect("#gender", {
+            create: false,          // Prevents adding new values
+            dropdownInput: false,   // Removes blinking cursor issue
+        });
+        new TomSelect("#country", {
+            create: false,          // Prevents adding new values
+            dropdownInput: false,   // Removes blinking cursor issue
+        });
+    });
 </script>
     
 </body>
