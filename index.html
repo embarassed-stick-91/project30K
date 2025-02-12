@@ -358,10 +358,34 @@
         
             // Show the success message instantly
             successMessage.style.display = 'block';
+
+            // Refresh journal list
+            //displayJournalEntries();
         
             // Redirect or refresh step after 1.5 seconds
             setTimeout(() => showStep('step1'), 1500);
         }
+
+        function loadJournalEntries() {
+        displayJournalEntries(); // Load and display notes on page load
+        }
+    
+        function displayJournalEntries() {
+        const notes = JSON.parse(localStorage.getItem('notes')) || [];
+        const journalContainer = document.getElementById('journalEntries');
+        journalContainer.innerHTML = ""; // Clear previous entries
+    
+        notes.forEach((note, index) => {
+            const entry = document.createElement("div");
+            entry.classList.add("journal-entry");
+            entry.innerHTML = `
+                <p><strong>${new Date(note.date).toLocaleDateString()} ${note.emoji}</strong></p>
+                <p>${note.text}</p>
+                <button onclick="deleteJournalEntry(${index})">Delete</button>
+            `;
+            journalContainer.appendChild(entry);
+        });
+    }
 
         function formatDate(dateString) {
             const date = new Date(dateString);
