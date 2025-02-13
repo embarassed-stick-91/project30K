@@ -13,6 +13,25 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
     <style>
+
+        /* Top Navigation */
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            font-size: 20px;
+            padding: 15px;
+            background-color: #ffffff;
+        }
+        .nav a {
+            text-decoration: none;
+            color: grey;
+            font-weight: light;
+        }
+        .nav a.active {
+            color: black;
+        }
+        
         /* Ensure all elements calculate width properly */
         *,
         *::before,
@@ -223,6 +242,7 @@
     <nav class="nav">
         <a href="index.html" class="active">Home</a>
         <a href="about.html">About</a>
+        <a href="notes.html">My jar</a>
     </nav>
     
     <div class="container">
