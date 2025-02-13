@@ -453,7 +453,9 @@
 
         
             // Redirect or refresh step after 1.5 seconds
-            setTimeout(() => showStep('step1'), 1500);
+            setTimeout(() => {
+                window.location.href = "notes.html";
+            }, 1500);
 
             document.getElementById("noteInput").value = "";
             selectedEmoji.classList.remove("selected");
