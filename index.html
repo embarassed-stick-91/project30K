@@ -84,11 +84,7 @@
             cursor: pointer;
             transition: transform 0.2s;
         }
-        .emoji.selected {
-            transform: scale(1.3);
-            border: 2px solid black;
-            border-radius: 50%;
-        }
+
         #notesPage {
             text-align: left;
         }
@@ -126,20 +122,22 @@
         .emoji {
             font-size: 32px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s ease, fill 0.2s ease;
         }
+        .emoji svg {
+        width: 56px;
+        height: 56px;
+    }
         .emoji.selected {
             transform: scale(1.3);
-            border: 2px solid blue;
             border-radius: 50%;
-            padding: 5px;
-            width: 40px;
-            height: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-
+        .emoji.selected use {
+            fill: #9270CD; /* Change the emoji color */
+        }
 
         /* Unified Styling for Inputs, Select, and Date Picker */
         .input-field,
@@ -220,6 +218,7 @@
 
 </head>
 <body>
+    
     <div class="container">
         <div id="step1">
             <img src="https://raw.githubusercontent.com/embarassed-stick-91/project30K/main/Hero.svg" alt="Illustration" class="hero-illustration">
@@ -269,11 +268,46 @@
     <div id="journalStep" class="hidden">
     <h2>Tell us about today</h2>
     <div class="emoji-container">
-        <span class="emoji" onclick="selectEmoji(this)">😀</span>
-        <span class="emoji" onclick="selectEmoji(this)">🙂</span>
-        <span class="emoji" onclick="selectEmoji(this)">😐</span>
-        <span class="emoji" onclick="selectEmoji(this)">☹️</span>
-        <span class="emoji" onclick="selectEmoji(this)">😢</span>
+        <div class="emoji" id="e1">
+            <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56">
+                <path d="M17.5 35.2034V36C17.5 36.9815 17.7668 37.9446 18.2717 38.7862L18.6258 39.3763C18.8747 39.7912 19.1613 40.1824 19.4818 40.5449L19.5304 40.5998C20.3465 41.5227 21.3494 42.2617 22.4726 42.7678L22.9885 43.0002C24.4512 43.6592 26.0373 44 27.6416 44H27.777C29.3579 44 30.923 43.6865 32.382 43.0777L33.5212 42.6024C34.118 42.3533 34.6808 42.0295 35.1961 41.6388C36.372 40.7472 37.2646 39.5343 37.7663 38.1466L38 37.5L38.2399 36.5406C38.4098 35.861 38.3823 35.147 38.1608 34.4825L38.0926 34.2779C38.0333 34.0999 37.9058 33.9529 37.738 33.869C37.2633 33.6317 36.7169 33.5809 36.2066 33.7267L33.5 34.5L31.1251 35.0937C28.7643 35.6839 26.2798 35.5424 24.0012 34.688L23.5 34.5L20.7685 33.5L20.0851 33.2909C18.7997 32.8976 17.5 33.8591 17.5 35.2034Z" stroke="#1C274C" stroke-width="2" stroke-linecap="round"></path>
+                <path d="M35 28C36.2887 28 37.3333 26.433 37.3333 24.5C37.3333 22.567 36.2887 21 35 21C33.7113 21 32.6667 22.567 32.6667 24.5C32.6667 26.433 33.7113 28 35 28Z" fill="#1C274C"></path>
+                <path d="M21 28C22.2887 28 23.3333 26.433 23.3333 24.5C23.3333 22.567 22.2887 21 21 21C19.7113 21 18.6667 22.567 18.6667 24.5C18.6667 26.433 19.7113 28 21 28Z" fill="#1C274C"></path>
+                <path d="M4.66666 28C4.66666 17.0005 4.66666 11.5008 8.08375 8.08372C11.5008 4.66663 17.0005 4.66663 28 4.66663C38.9993 4.66663 44.4992 4.66663 47.9162 8.08372C51.3333 11.5008 51.3333 17.0005 51.3333 28C51.3333 38.9993 51.3333 44.4992 47.9162 47.9161C44.4992 51.3333 38.9993 51.3333 28 51.3333C17.0005 51.3333 11.5008 51.3333 8.08375 47.9161C4.66666 44.4992 4.66666 38.9993 4.66666 28Z" stroke="#1C274C" stroke-width="2"></path>
+            </svg>
+        </div>
+        <div class="emoji" id="e2">
+           <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 57 56">
+                <path d="M21.5 37.3334C23.4842 38.8041 25.8974 39.6667 28.5 39.6667C31.1026 39.6667 33.5157 38.8041 35.5 37.3334" stroke="#1C274C" stroke-width="2" stroke-linecap="round"></path>
+                <path d="M35.5 28C36.7887 28 37.8334 26.433 37.8334 24.5C37.8334 22.567 36.7887 21 35.5 21C34.2114 21 33.1667 22.567 33.1667 24.5C33.1667 26.433 34.2114 28 35.5 28Z" fill="#1C274C"></path>
+                <path d="M21.5 28C22.7887 28 23.8334 26.433 23.8334 24.5C23.8334 22.567 22.7887 21 21.5 21C20.2114 21 19.1667 22.567 19.1667 24.5C19.1667 26.433 20.2114 28 21.5 28Z" fill="#1C274C"></path>
+                <path d="M5.16669 28C5.16669 17.0005 5.16669 11.5008 8.58378 8.08372C12.0009 4.66663 17.5006 4.66663 28.5 4.66663C39.4994 4.66663 44.9993 4.66663 48.4162 8.08372C51.8334 11.5008 51.8334 17.0005 51.8334 28C51.8334 38.9993 51.8334 44.4992 48.4162 47.9161C44.9993 51.3333 39.4994 51.3333 28.5 51.3333C17.5006 51.3333 12.0009 51.3333 8.58378 47.9161C5.16669 44.4992 5.16669 38.9993 5.16669 28Z" stroke="#1C274C" stroke-width="2"></path>
+              </svg>
+        </div>
+        <div class="emoji" id="e3">
+              <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56">
+        <path d="M21 37.3334C23.3333 37.3334 25.3974 37.3334 28 37.3334C30.6026 37.3334 32.6667 37.3334 35 37.3334" stroke="#1C274C" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M35 28C36.2887 28 37.3334 26.433 37.3334 24.5C37.3334 22.567 36.2887 21 35 21C33.7114 21 32.6667 22.567 32.6667 24.5C32.6667 26.433 33.7114 28 35 28Z" fill="#1C274C"></path>
+        <path d="M21 28C22.2887 28 23.3334 26.433 23.3334 24.5C23.3334 22.567 22.2887 21 21 21C19.7114 21 18.6667 22.567 18.6667 24.5C18.6667 26.433 19.7114 28 21 28Z" fill="#1C274C"></path>
+        <path d="M4.66669 28C4.66669 17.0005 4.66669 11.5008 8.08378 8.08372C11.5009 4.66663 17.0006 4.66663 28 4.66663C38.9994 4.66663 44.4993 4.66663 47.9162 8.08372C51.3334 11.5008 51.3334 17.0005 51.3334 28C51.3334 38.9993 51.3334 44.4992 47.9162 47.9161C44.4993 51.3333 38.9994 51.3333 28 51.3333C17.0006 51.3333 11.5009 51.3333 8.08378 47.9161C4.66669 44.4992 4.66669 38.9993 4.66669 28Z" stroke="#1C274C" stroke-width="2"></path>
+      </svg> 
+        </div>
+        <div class="emoji" id="e4">
+               <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 57 56">
+        <path d="M21.5 39.6667C23.4842 38.196 25.8974 37.3334 28.5 37.3334C31.1026 37.3334 33.5157 38.196 35.5 39.6667" stroke="#1C274C" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M35.5 28C36.7887 28 37.8334 26.433 37.8334 24.5C37.8334 22.567 36.7887 21 35.5 21C34.2114 21 33.1667 22.567 33.1667 24.5C33.1667 26.433 34.2114 28 35.5 28Z" fill="#1C274C"></path>
+        <path d="M21.5 28C22.7887 28 23.8334 26.433 23.8334 24.5C23.8334 22.567 22.7887 21 21.5 21C20.2114 21 19.1667 22.567 19.1667 24.5C19.1667 26.433 20.2114 28 21.5 28Z" fill="#1C274C"></path>
+        <path d="M5.16669 28C5.16669 17.0005 5.16669 11.5008 8.58378 8.08372C12.0009 4.66663 17.5006 4.66663 28.5 4.66663C39.4994 4.66663 44.9993 4.66663 48.4162 8.08372C51.8334 11.5008 51.8334 17.0005 51.8334 28C51.8334 38.9993 51.8334 44.4992 48.4162 47.9161C44.9993 51.3333 39.4994 51.3333 28.5 51.3333C17.5006 51.3333 12.0009 51.3333 8.58378 47.9161C5.16669 44.4992 5.16669 38.9993 5.16669 28Z" stroke="#1C274C" stroke-width="2"></path>
+      </svg>
+        </div>
+        <div class="emoji" id="e5">
+               <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56">
+        <path d="M21.5 39.6667C23.4842 38.196 25.8974 37.3334 28.5 37.3334C31.1026 37.3334 33.5157 38.196 35.5 39.6667" stroke="#1C274C" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M18.0452 28.7813V28.7813C19.4177 29.2258 20.9222 28.7781 21.8285 27.6556L22.1906 27.2072" stroke="#1C274C" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M34.027 27.1257V27.1257C34.6502 28.3646 35.9971 29.0648 37.3691 28.8633L37.911 28.7837" stroke="#1C274C" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M4.66669 28C4.66669 17.0005 4.66669 11.5008 8.08378 8.08372C11.5009 4.66663 17.0006 4.66663 28 4.66663C38.9994 4.66663 44.4993 4.66663 47.9162 8.08372C51.3334 11.5008 51.3334 17.0005 51.3334 28C51.3334 38.9993 51.3334 44.4992 47.9162 47.9161C44.4993 51.3333 38.9994 51.3333 28 51.3333C17.0006 51.3333 11.5009 51.3333 8.08378 47.9161C4.66669 44.4992 4.66669 38.9993 4.66669 28Z" stroke="#1C274C" stroke-width="2"></path>
+      </svg>
+        </div>
     </div>
     <textarea id="journalEntry" placeholder="Write your thoughts here..." maxlength="280" oninput="updateCharCount()"></textarea>
     <p class="char-counter" id="charCount">280 characters remaining</p>
@@ -282,7 +316,7 @@
     <button id="saveButton" onclick="saveJournal()">Save Note</button>
 
     <!-- Success message is hidden initially -->
-    <p class="success-message" id="successMessage" style="display: none;">✔ Note saved successfully!</p>
+    <p class="success-messvge" id="successMessage" style="display: none;">✔ Note saved successfully!</p>
 </div>
 
          <div id="notesContainer" class="hidden">
@@ -440,6 +474,22 @@
         new TomSelect("#country", {
             create: false,          // Prevents adding new values
             dropdownInput: false,   // Removes blinking cursor issue
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const emojis = document.querySelectorAll(".emoji");
+
+        emojis.forEach((emoji) => {
+            emoji.addEventListener("click", function () {
+                // Remove 'selected' class from all emojis
+                emojis.forEach((e) => e.classList.remove("selected"));
+
+                // Add 'selected' class to the clicked emoji
+                this.classList.add("selected");
+            });
         });
     });
 </script>
