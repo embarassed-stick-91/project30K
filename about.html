@@ -3,21 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
+    <title>About Lifejar</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
         .nav {
             display: flex;
+            justify-content: center;
             gap: 20px;
             font-size: 18px;
-            padding: 10px;
+            padding: 15px;
+            background-color: #f4f4f4;
         }
         .nav a {
             text-decoration: none;
             color: grey;
+            font-weight: bold;
         }
         .nav a.active {
             color: black;
-            font-weight: bold;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .illustration {
+            max-width: 100%;
+            height: auto;
+        }
+        .contact {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .contact a {
+            color: #0073e6;
+            text-decoration: none;
+        }
+        .contact a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -26,9 +54,25 @@
     <nav class="nav">
         <a href="index.html">Home</a>
         <a href="about.html" class="active">About</a>
+        <a href="notes.html">My Notes</a>
     </nav>
 
-    <h1>About Page</h1>
+    <div class="container">
+        <h1>About Lifejar</h1>
+        
+        <img src="illustration.png" alt="Lifejar Illustration" class="illustration">
+
+        <p>
+            Lifejar is a simple yet powerful journaling tool designed to help you capture thoughts, emotions, 
+            and moments in an organized way. Whether you're reflecting on your day, tracking personal growth, 
+            or just jotting down ideas, Lifejar keeps your notes safe and accessible.
+        </p>
+
+        <div class="contact">
+            <p>Have questions? Contact us at:</p>
+            <p><a href="mailto:support@lifejar.com">support@lifejar.com</a></p>
+        </div>
+    </div>
 
 </body>
 </html>
