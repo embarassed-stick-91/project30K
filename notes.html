@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Jar - Saved Notes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Outfit, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            font-size: 18px;
+            padding: 15px;
+            background-color: #ffffff;
+        }
+        .nav a {
+            text-decoration: none;
+            color: grey;
+            font-weight: bold;
+        }
+        .nav a.active {
+            color: black;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .note {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .note .emoji {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+        .note .date {
+            font-size: 12px;
+            color: grey;
+        }
+        .no-notes {
+            color: grey;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="my-jar.html" class="active">My Jar</a>
+    </nav>
+
+    <div class="container">
+        <h1>My Jar</h1>
+        <p>Your saved thoughts and reflections.</p>
+        <div id="notesContainer">
+            <p class="no-notes">No notes saved yet.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const notesContainer = document.getElementById("notesContainer");
+            const notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+            if (notes.length === 0) {
+                notesContainer.innerHTML = "<p class='no-notes'>No notes saved yet.</p>";
+            } else {
+                notesContainer.innerHTML = notes.map(note => `
+                    <div class="note">
+                        <p><span class="emoji">${note.emoji}</span> ${note.text}</p>
+                        <p class="date">${new Date(note.date).toLocaleString()}</p>
+                    </div>
+                `).join('');
+            }
+        });
+    </script>
+
+</body>
+</html>
