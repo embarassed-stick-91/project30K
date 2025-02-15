@@ -13,6 +13,15 @@
     <!-- Add Tom Select (for dropdowns) & Flatpickr (for datepicker) Styles -->
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Choices.js for dropdowns -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    
+    <!-- Pikaday for date picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css" />
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+
     
     <style>
 
@@ -288,12 +297,15 @@
         <div id="step2" class="hidden">
             <h2>Enter Your Details</h2>
             
-            <input type="text" id="dob" class="input-field" placeholder="Select your date of birth">
+            <!-- Date of Birth Field -->
+            <input type="text" id="dob" placeholder="Select your birthdate" class="input-field" readonly />
+
 
             <select id="gender">
                 <option value="" disabled selected>Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
+                <option value="other">Other</option>
             </select>
             
             <button onclick="showStep('step3')">Continue</button>
@@ -524,28 +536,30 @@
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-<script>
-    // Initialize Flatpickr for Date Picker
-    flatpickr("#dob", {
-        dateFormat: "Y-m-d",
-        maxDate: "today",
-        altInput: true,
-        altFormat: "F j, Y"
-    });
-
-    // Initialize Tom Select for Dropdowns
-    document.addEventListener("DOMContentLoaded", function () {
-        new TomSelect("#gender", {
-            create: false,          // Prevents adding new values
-            dropdownInput: false,   // Removes blinking cursor issue
-
+    <script>
+        // Initialize Pikaday for Date Picker
+        new Pikaday({
+            field: document.getElementById('dob'),
+            format: 'YYYY-MM-DD',
+            maxDate: new Date(),
+            theme: 'dark-theme' // Optional for styling
         });
-        new TomSelect("#country", {
-            create: false,          // Prevents adding new values
-            dropdownInput: false,   // Removes blinking cursor issue
+    
+        // Initialize Choices.js for Dropdowns
+        document.addEventListener("DOMContentLoaded", function () {
+            new Choices("#gender", {
+                searchEnabled: false, // Disable search bar in dropdown
+                itemSelectText: "",   // Remove "Press Enter to select" text
+                shouldSort: false
+            });
+    
+            new Choices("#country", {
+                searchEnabled: true, // Enable search for countries
+                itemSelectText: "",  
+                shouldSort: true
+            });
         });
-    });
-</script>
+    </script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
