@@ -25,9 +25,14 @@
     
     <style>
 
+        html {
+            overflow-y: auto;
+        }
+        
         /* Top Navigation */
         .nav {
             position: fixed;
+            margin: 0 auto;
             top: 0;
             left: 0;
             width: 100%;
@@ -46,6 +51,22 @@
         }
         .nav a.active {
             color: black;
+        }
+
+        /* Webkit Browsers (Chrome, Edge, Safari) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
         
         /* Ensure all elements calculate width properly */
