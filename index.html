@@ -205,7 +205,7 @@
             border: 1px solid #f5f5f5;
             font-size: 16px;
             background: white;
-            box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
+            /* box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1); */  /* No shadow required */
             height: 32px; /* Explicitly set height for uniformity */
             display: flex;
             align-items: center; /* Ensures text inside is vertically aligned */
@@ -541,7 +541,9 @@
         new Pikaday({
             field: document.getElementById('dob'),
             format: 'YYYY-MM-DD',
-            maxDate: new Date(),
+            maxDate: new Date(),  // Ensures no future dates can be selected
+            minDate: new Date(1960, 0, 1), // Allows dates from Jan 1, 1960
+            yearRange: [1960, new Date().getFullYear()], // Shows full year range
             theme: 'dark-theme' // Optional for styling
         });
     
