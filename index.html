@@ -356,11 +356,7 @@
             
         
             <select id="country" class="input-field" placeholder="Select your country">
-                <option value="US">United States</option>
-                <option value="UK">United Kingdom</option>
-                <option value="CA">Canada</option>
-                <option value="IN">India</option>
-                <option value="UAE">United Arab Emirates</option>
+                <option value="">Loading countries...</option> <!-- Placeholder while loading -->
             </select>
             
             
@@ -679,6 +675,51 @@
         // Load data when the page is ready
         document.addEventListener("DOMContentLoaded", loadLifeExpectancy);
     </script>
+
+    <script>
+    async function loadCountries() {
+        try {
+            // Fetch JSON file
+            const response = await fetch('data/life_expectancy_who.json');
+            const data = await response.json();
+
+            // Extract country names
+            const lifeExpectancyData = data.fact;
+            const countries = new Set();
+
+            // Loop through data to collect unique country names
+            lifeExpectancyData.forEach(item => {
+                countries.add(item.dims.COUNTRY);
+            });
+
+            // Sort country names alphabetically
+            const sortedCountries = [...countries].sort();
+
+            // Reference dropdown
+            const countryDropdown = document.getElementById("country");
+
+            // Clear existing options
+            countryDropdown.innerHTML = `<option value="">Select your country</option>`;
+
+            // Populate dropdown dynamically
+            sortedCountries.forEach(country => {
+                const option = document.createElement("option");
+                option.value = country;
+                option.textContent = country;
+                countryDropdown.appendChild(option);
+            });
+
+            console.log("Countries loaded:", sortedCountries);
+
+        } catch (error) {
+            console.error("Error loading countries:", error);
+        }
+    }
+
+    // Load countries when the page is ready
+    document.addEventListener("DOMContentLoaded", loadCountries);
+</script>
+
 
     
 </body>
