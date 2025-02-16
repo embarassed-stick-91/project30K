@@ -356,7 +356,11 @@
             
         
             <select id="country" class="input-field" placeholder="Select your country">
-                <option value="">Loading countries...</option> <!-- Placeholder while loading -->
+                <option value="US">United States</option>
+                <option value="UK">United Kingdom</option>
+                <option value="CA">Canada</option>
+                <option value="IN">India</option>
+                <option value="UAE">United Arab Emirates</option>
             </select>
             
             
@@ -433,6 +437,14 @@
 
     <script>
         let selectedEmoji = null;
+
+        const lifeExpectancy = {
+            "US": { male: 76, female: 81 },
+            "UK": { male: 79, female: 83 },
+            "CA": { male: 80, female: 84 },
+            "IN": { male: 70, female: 72 },
+            "UAE": { male: 77, female: 80 }
+        };
 
         function showStep(stepId) {
             document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
@@ -623,106 +635,6 @@
     }
     fetchQuote();
 </script>
-
-    <script>
-        async function loadLifeExpectancy() {
-            try {
-                // Fetch JSON file
-                const response = await fetch('https://raw.githubusercontent.com/embarassed-stick-91/project30K/main/life_expectancy_who.json');
-                const data = await response.json();
-    
-                // Extract life expectancy data from "fact" array
-                const lifeExpectancyData = data.fact;
-    
-                // Convert JSON data into { "US": { male: 76, female: 81, other: 78 } } format
-                const lifeExpectancy = {};
-    
-                lifeExpectancyData.forEach(item => {
-                    const country = item.dims.COUNTRY;
-                    const sex = item.dims.SEX;
-                    const value = parseFloat(item.Value);
-    
-                    // Standardize gender keys
-                    const genderKey = sex === "Male" ? "male" : sex === "Female" ? "female" : sex === "Both sexes" ? "other";
-    
-                    // Initialize country if not present
-                    if (!lifeExpectancy[country]) {
-                        lifeExpectancy[country] = {};
-                    }
-    
-                    // Assign value to gender key
-                    lifeExpectancy[country][genderKey] = value;
-                });
-    
-                console.log(lifeExpectancy); // Debug: Check if data is structured correctly
-    
-                // Example: Fetch life expectancy for user-selected country & gender
-                const userCountry = "United States of America"; // Replace with dynamic country selection
-                const userGender = "male"; // Replace with dynamic gender selection
-    
-                // Retrieve expectancy value
-                const expectancy = lifeExpectancy[userCountry]?.[userGender] || "N/A";
-                console.log(`Life Expectancy in ${userCountry} for ${userGender}: ${expectancy}`);
-    
-                // Inject into HTML
-                document.getElementById("life-expectancy").textContent = expectancy;
-    
-            } catch (error) {
-                console.error("Error loading life expectancy data:", error);
-            }
-        }
-    
-        // Load data when the page is ready
-        document.addEventListener("DOMContentLoaded", loadLifeExpectancy);
-    </script>
-
-    <script>
-    async function loadCountries() {
-        try {
-            // Fetch JSON file
-            const response = await fetch('https://raw.githubusercontent.com/embarassed-stick-91/project30K/main/life_expectancy_who.json');
-            const data = await response.json();
-            console.log("Fetched Data:", data);
-
-            // Extract country names
-            const lifeExpectancyData = data.fact;
-            const countries = new Set();
-
-            // Loop through data to collect unique country names
-            lifeExpectancyData.forEach(item => {
-                countries.add(item.dims.COUNTRY);
-            });
-
-            
-            // Sort country names alphabetically
-            const sortedCountries = [...countries].sort();
-
-            // Reference dropdown
-            const countryDropdown = document.getElementById("country");
-
-            // Clear existing options
-            countryDropdown.innerHTML = `<option value="">Select your country</option>`;
-
-            // Populate dropdown dynamically
-            sortedCountries.forEach(country => {
-                const option = document.createElement("option");
-                option.value = country;
-                option.textContent = country;
-                countryDropdown.appendChild(option);
-            });
-
-            console.log("Countries loaded:", sortedCountries);
-
-        } catch (error) {
-            console.error("Error loading countries:", error);
-        }
-    }
-
-    // Load countries when the page is ready
-    document.addEventListener("DOMContentLoaded", loadCountries);
-</script>
-
-
     
 </body>
 </html>
